@@ -1,0 +1,900 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>DT Blk Fx</title>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+</head>
+<body style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+
+<p align="center">
+  <font size="7">
+      DtBlkFx Revision 1.1<br>
+  </font>
+<font size="4"><i><big><big>VST audio
+effect plugin </big> </big><big><big>by Darrell Tam <font
+ size="4">(</font><a href="mailto:darrell.barrell@gmail.com"><font
+ size="4">darrell.barrell@gmail.com</font></a><font size="4">)</font></big></big></i></font></p>
+<p align="center"><big><big><big><big>User Guide</big></big></big></big></p>
+<big><big><font size="4"><font size="3"> </font></font></big></big>
+<p align="center"><big><big><font size="4"><font size="3">Compile
+date April 2008, Microsoft Windows version</font></font></big></big></p>
+<p align="center">
+  <font size="2">This software
+incorporates code from <i>fastest-fourier-transform-in-the-west</i> <i>3.1.2</i>
+(<a href="http://www.fftw.org">www.fftw.org</i></a>),
+portable network graphics library code from <i>libpng</i>/<i>zlib</i> (<a href="http://www.libpng.org">www.libpng.org</a>/<a href="http://www.zlib.net">www.zlib.net</a>),
+    <i>Steinberg VST plugin SDK 2.3</i> and Steinberg <i>VSTGUI 3.5</i>.
+  VST is a trademark of Steinberg
+Media Technologies GmbH. User manual diagrams incorporate
+graphics from&nbsp;<a href="http://www.ian.umces.edu">ian.umces.edu</a>.
+</font> </p>
+<div align="center">
+<hr noshade="noshade"> </div>
+<h2 align="left">The Description</h2>
+<p align="left"><i>DtBlkFx</i> is a Fast-Fourier-Transform (FFT)
+based&nbsp;Virtual Sound Technology (VST)&nbsp;plug-in for use in a
+variety of audio software running under Microsoft Windows 2000&nbsp;or
+newer. </p>
+<p align="left">Use it for... </p>
+<ul>
+  <li>
+    <div align="left">Precision parametric equalizing
+with&nbsp;sharp-roll off </div>
+    <ul>
+      <li>
+        <div align="left">Set the frequencies&nbsp;so&nbsp;accurately
+that you can adjust individual harmonics of a sound</div>
+      </li>
+      <li>
+        <div align="left">Frequency resolutions&nbsp;of up to 0.7 Hz</div>
+      </li>
+    </ul>
+  </li>
+  <li> Harmonic based (or comb) filtering
+    <ul>
+      <li> Set a fundamental frequency and adjust the level of it and
+its harmonics - you can even remove the pitched component of a voice </li>
+      <li> Active harmonic tracking - let <i>DtBlkFx</i>&nbsp;automatically
+track&nbsp;a sound&nbsp;and adjust the level of it's harmonics</li>
+    </ul>
+  </li>
+  <li> Various types of noise control
+    <ul>
+      <li> Change the "contrast" between loud and soft frequencies </li>
+      <li> Adjust&nbsp;only those frequencies below or above a
+particular threshold </li>
+      <li> Clip frequencies above a particular threshold </li>
+      <li> Sound smearing (phase randomizing)</li>
+    </ul>
+  </li>
+  <li> Frequency shifting
+    <ul>
+      <li> Harmonic shifting by a fixed number of notes </li>
+      <li> Non-harmonic shifting by a fixed frequency </li>
+      <li> Active harmonic repitch - the pitch of your sound is
+monitored and shifted to a destination note (or matched to another
+channel)<br>
+      </li>
+    </ul>
+  </li>
+  <li> Various methods of mixing left and right channels
+    <ul>
+      <li> Standard Vocoding (frequency enveloping) - make your trumpet
+rap, string section&nbsp;sing or synthesizer talk </li>
+      <li> Harmonic based vocoding - harmonics in one channel are
+power-matched&nbsp;to those in the other (or some predefined waveforms)
+for a new vocoding sound</li>
+      <li>Convolution-like mixing</li>
+      <li>2 new mixing algorithms<br>
+      </li>
+    </ul>
+  </li>
+  <li> Frequency masking
+    <ul>
+      <li> A harmonic or threshold mask&nbsp;may be set&nbsp;for any
+effect (apart from vocoding) - for example only shift frequencies that
+are below the threshold</li>
+    </ul>
+  </li>
+</ul>
+<p>You&nbsp;can select up to 8 of the above effects to be run in
+series! Combining the effects in this way allows you&nbsp;to
+make&nbsp;completely new and surprising sounds.</p>
+<p><i>DtBlkFx</i>&nbsp;is freely distributable and is covered&nbsp;by
+the terms&nbsp;of the&nbsp;GNU licensing agreement.<br>
+</p>
+<h3>Some really short theory</h3>
+<p>This effect works differently to most others - instead of filtering
+or distorting audio data directly, it finds the frequency spectrum
+via&nbsp;a fast-fourier-transform&nbsp;and then does stuff to that.<br>
+</p>
+<p align="center"><img src="data/silly2.jpg">&nbsp;</p>
+<p>The steps are:</p>
+<ol>
+  <li> Cut input sample data into overlapping blocks </li>
+  <li> Transform each block to&nbsp;the frequency spectrum (this is
+called the fast-fourier-transform) </li>
+  <li> Apply some effects&nbsp;to the spectrum </li>
+  <li> Inverse transformed the frequency spectrum back to sample data </li>
+  <li> You feel satisfied</li>
+</ol>
+<p>Note: The effect <strong>must</strong> delay the audio the length
+of at least a block. By default it is set to 1 beat but you
+can&nbsp;adjust&nbsp;this down to a fraction of a beat.<br>
+</p>
+<h2>The Installation</h2>
+The 2 versions of <span style="font-style: italic;">DtBlkFx</span> are<br>
+<ul>
+  <li><i>DtBlkFx</i> - mono version </li>
+  <li> <i>DtBlkFxS</i> - stereo version</li>
+</ul>
+<h3>Windows</h3>
+  <p style="text-align: left;">
+    No installer... manually copy <kbd>DtBlkFx.dll</kbd>,
+    <kbd>DtBlkFxS.dll</kbd> and the <kbd>dtblkfx</kbd> directory to the
+    VST plug-ins directory of your music software (e.g. <kbd>
+      <nobr>c:\program files\VstPlugins</nobr></kbd>). Note, leave the <i>DLL</i>'s outside of the <i>dtblkfx</i> directory just like they
+    appear in the zip file.
+    <P>
+      If you have problems with <i>Renoise 1.9.1</i> (plugins don't appear in the VST list) try deleting the
+      <kbd>
+        <nobr>
+          C:\Documents and Settings\<i>&lt;your user name&gt;</i>\Application Data\Renoise</i>
+        </nobr>
+    </kbd> (actually just deleting all <kbd>CachedVsts.xml</kbd> &amp; <kbd>CachedFailedVsts.xml</kbd> in that directory for all Renoise versions should work - you can do this quickly by doing a search for Cached*Vsts.xml and deleting all found).
+    </P>
+
+  </p>
+<h3>Macintosh</h3>
+Copy the <kbd>DtBlkFx.vst</kbd> and <kbd>DtBlkFxS.vst</kbd> to <kbd>/Library/Audio/Plug-Ins/VST</kbd> - you
+can navigate there using <span style="font-style: italic;">Finder</span>
+by opening <span style="font-style: italic;">Macintosh HD</span>,
+then <span style="font-style: italic;">Library</span>, then <span
+ style="font-style: italic;">Audio</span> etc.<br>
+<br>
+The effects are built as universal
+binaries and should run on PowerPC &amp; Intel Macs.<br>
+<br>
+<h2>The Tour</h2>
+<p align="left">Here's the user interface from the Windows 1.1 version
+(currently not available on the Mac).<br>
+</p>
+<center><img id="IMG1" src="data/screenshot.png" border="2"></center>
+<p align="left">What is all that stuff? Read on...</p>
+<h3 align="left">Overall Params&nbsp;</h3>
+<p align="left">These are the parameters along the top.</p>
+<div align="left">
+<center>
+<table id="Table1" bgcolor="#aaaaaa" border="0" cellpadding="6"
+ cellspacing="1" height="204" width="90%">
+  <tbody>
+    <tr bgcolor="#eeeeff">
+      <td><font color="#004080"><i><strong>MixBack</strong></i></font></td>
+      <td>
+      <p>Percentage mix back of original sound. Set this to 100% to
+save CPU if you don't want any effect apart from delay.</p>
+      <p>VstParam: MixBack</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td><font color="#004080"><strong><i>Power</i></strong></font></td>
+      <td>
+      <p>Power can be set to <i>match</i> or <i>filter</i>.</p>
+      <p><i>Match</i>&nbsp;causes the output "power"&nbsp;to
+be&nbsp;amplified or attenuated to be the same as the input "power".
+This means individual effect amplitudes are relative to one another. It
+also means that if you&nbsp;remove a large portion of your frequency
+spectrum then left over stuff may end up sounding very loud.</p>
+      <p><i>Filter</i> mode operates like a traditional filter where
+the output power may be very different to the input power. This mode is
+of most use when using <i>DtBlkFx</i> as a parametric equalizer.</p>
+      <p>VstParam: MixBack shared parameter, if MixBack param &lt; 0.5
+then power is <i>match</i> otherwise power is <i>filter</i>.</p>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td><font color="#004080"><strong><i>Delay</i></strong></font></td>
+      <td>
+      <p align="left">Since <i>DtBlkFx </i>processes audio in
+blocks it <strong>must delay the sound&nbsp;to&nbsp;operate</strong>
+.&nbsp;<i>Delay</i> controls the amount of delay introduced in
+music-beats.</p>
+      <p align="left">Hopefully this isn't too painful because if you
+shift your audio track forward by&nbsp;the same number of beats then
+all the timing is back to normal. I have had quite a few "complaints"
+about the delay! But that is just how this effect works!!<br>
+      </p>
+      <p align="left">The maximum block size that can be processed is
+limited by the delay that you specify (i.e. small delays will only
+allow small block sizes).</p>
+      <p align="left">VstParam: Delay</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td><font color="#004080"><strong><i>Overlap</i></strong></font></td>
+      <td>
+      <p>Percentage overlap of blocks to use. A large overlap results
+in a smooth transit ions between blocks but more CPU while a smaller
+overlap can give interesting effects.</p>
+      <p>VstParam: Overlap</p>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td><font color="#004080"><strong><i>Sync</i></strong></font></td>
+      <td>
+      <p>If <i>sync</i> is turned on then DtBlkFx will try align the
+blocks with the song tempo and any parameter changes.&nbsp;When turned
+off then the&nbsp;position of blocks will have no particular
+relationship with the song tempo.</p>
+      <p>VstParam: Shared with Overlap param (<span
+ style="font-style: italic;">on</span> when &gt; 0.5)</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td><font color="#004080"><strong><i>BlkLen</i></strong></font></td>
+      <td>
+      <p>Specify the maximum length of block to&nbsp;process audio data.</p>
+      <p>If the specified <i>Delay</i> is&nbsp;less than the&nbsp;<i>BlkLen</i>
+&nbsp;specified then&nbsp;a&nbsp;smaller block length will&nbsp;be used
+and displayed with an asterisk (*). </p>
+      <p>Longer block lengths give a higher frequency resolution but
+need more delay and CPU. Short block lengths can&nbsp;introduce
+interesting artefacts.</p>
+      <p>VstParam: BlkLen</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</center>
+</div>
+<h3 align="left">Spectrograms</h3>
+<div align="left">
+<div align="left">The spectrograms show the frequency content of the
+sound before (Input Spectrogram) and after (Output Spectrogram)
+processing by <i>DtBlkFx</i>. The colour represents the amount of
+sound energy at each frequency.</div>
+<center><img src="data/sgram-theory.gif"></center>
+<div align="left">&nbsp;</div>
+<div align="left">&nbsp;</div>
+<div align="left">Move the mouse over either to see a frequency and
+note display. In the mono version click the mouse on a display to
+toggle whether it is paused or not. In the stereo version click for a
+menu to select which channel (or both or paused) from the input or
+output to display. Pausing lets you inspect it more conveniently and
+saves CPU.</div>
+<div align="left">&nbsp;</div>
+How does it work? Each line of the spectrogram is generated from one
+block (or more for small block sizes) of FFT'd data. The vertical axis
+is time with most recent data scrolling in at the bottom. The
+horizontal axis shows frequency with 0Hz on the far left and the
+maximum frequency (i.e. 22050Hz for 44.1Khz sampling) on the far right.
+The colour indicates the power level of each frequency: red is -13 dB,
+black is -80 dB.</div>
+<div align="left">&nbsp;</div>
+<div align="left">For the mathematically inclined... the horizontal
+scaling is linear over <span style="font-style: italic;">octaves</span>
+(which is how we perceive sound) instead of <span
+ style="font-style: italic;">Hz</span> (it is
+<span style="font-style: italic;">logarithmic</span> over <span
+ style="font-style: italic;">Hz</span> meaning that high frequencies
+are closer together
+than low frequencies). Since FFT's work linearly over <span
+ style="font-style: italic;">Hz</span> there is
+less frequency resolution (i.e. wider <span style="font-style: italic;">bins</span>)
+at low frequencies.<br>
+</div>
+<h3 align="left">Effects</h3>
+<div align="left">Up to 8 <i>DtBlkFx</i> effects can be applied to
+the frequency spectrum. The effects are applied in series.</div>
+  <p>Each effect line in the user interface consists of 5 parameters as shown below.</p>
+  <center><img src="data/fx_slot.png"></center>
+  <p>Note that the numbers in the selected frequency range correspond to <i>C</i> octave - e.g. "4" is the frequency of <i>C-4</i>.
+</p>
+</div>
+<h2>
+<center>
+<table id="Table2" bgcolor="#aaaaaa" border="0" cellpadding="6"
+ cellspacing="1" width="90%">
+  <tbody>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>FreqA
+/ FreqB</i></strong></font></td>
+      <td>
+      <p>Use these to select a frequency range for the effect. The
+frequency is displayed in Hertz and the selected range is shown in <span
+ style="font-style: italic;">inverse</span> on the <span
+ style="font-style: italic;">spectrograms</span>.</p>
+      <p>For&nbsp;non-harmonic effects&nbsp; <i>FreqA</i> &amp; <i>FreqB</i>
+are used to select or exclude a frequency range to process. Set <i>FreqA</i>
+less than <i> FreqB</i> to include the region between them otherwise
+the range is excluded.</p>
+      <center><img src="data/freqselect.gif"></center>
+      <p>Use the smallest possible frequency range for an effect to
+save on CPU.<br>
+      </p>
+      <p>Right-click-drag on <span style="font-style: italic;">FreqA</span>
+or <span style="font-style: italic;">FreqB</span> to slide both at
+once.<br>
+      </p>
+      <p>VstParam: &lt;n&gt;: FreqA / &lt;n&gt;: FreqB</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>Amp</i></strong></font></td>
+      <td>
+      <p><i>Amplitude</i> controls the amplitude of the selected
+frequency range for effect. For some effects it controls the mix-back
+amount (wet to dry ratio).<br>
+      </p>
+      <p>If the overall <i>power</i> parameter is set to <i>match</i>
+then the gain/attenuation is relative - raising the <i>Amplitude</i>
+of the
+selected frequency range effectively decreases&nbsp;that&nbsp;of the
+other frequencies.<br>
+      </p>
+      <p>VstParam: &lt;n&gt;: Amp</p>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>Type</i></strong></font></td>
+      <td>
+      <p><i>Type</i> controls which effect will be run. The possible
+effects are described in the next
+section.</p>
+      <p>VstParam: &lt;n&gt;: Type</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>Value</i></strong></font></td>
+      <td>
+      <p>The meaning of <i>value</i> depends on which effect <i>type</i>
+has been selected.</p>
+      <p>VstParam: &lt;n&gt;: Value</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</center>
+</h2>
+<h3 align="left">Effect types</h3>
+<p align="left">The effect type is selected from the <i>Type</i>
+pop-up menu for each effect position.</p>
+<p align="left">There are 2 categories of effects as described below: <i>Normal</i>
+and <i>Masking</i>.</p>
+<p align="left"><i><strong>Normal Effects</strong></i></p>
+<center>
+<table bgcolor="#aaaaaa" border="0" cellpadding="6" cellspacing="1"
+ width="90%">
+  <tbody>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top">
+      <p><font color="#004080"><strong><i>Filter</i></strong></font></p>
+      </td>
+      <td>
+      <p>Parametric equalizer - adjust the amplitude of the frequency
+range specified. This does not use the effect <i>value</i> control.</p>
+      <p>Some of the other effects have this capability too but will
+tend to use more CPU if&nbsp;this is all you want to do.</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top">
+      <p><font color="#004080"><strong><i>Contrast</i></strong></font></p>
+      </td>
+      <td>
+      <p><i>Contrast</i> &nbsp;changes the dynamic range of
+frequencies present in the sound. </p>
+      <p> Positive contrast results in the reduction of noise and
+softer frequency components. Small amounts are useful for reducing
+distortion and un-muddying sound. When applied heavily only the loudest
+tones remain but&nbsp;can end up sounding like nasty audio compression
+on dodgey web videos. </p>
+      <p>Negative values flatten the frequency spectrum and increase
+noise. Small to medium amounts are useful for adding "body".</p>
+      <center><img src="data/contrast.gif"></center>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>Smear</i></strong></font></td>
+      <td>
+      <p>Randomizes the phase of the spectrum data which results in a
+flattening of the sound envelope. Sound smearing can be used to remove
+loop clicks and give a sustain effect.</p>
+      <p>Similar to&nbsp;reverb in other&nbsp;plugins&nbsp;except
+that&nbsp;outcome is&nbsp;both forwards and backwards in time!</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>Thresh</i></strong></font></td>
+      <td>
+      <p>Boost or reduce&nbsp;frequency components with an amplitude
+above or below a particular threshold (set by the effect <i>value</i>)&nbsp;within
+the selected frequency range.</p>
+      <center><img src="data/thresh.gif"></center>
+      <p>You can get a similar sound to <i>contrast</i>. In previous
+versions of <i>DtBlkFx</i> this was known as "Weed".</p>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>Clip</i></strong></font></td>
+      <td>
+      <p>Clip frequency components greater than a particular level (set
+by the effect <i>value</i>).</p>
+      <center><img src="data/clip.gif"></center>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>Resize</i></strong></font></td>
+      <td>
+      <p>The <span style="font-style: italic;">resize</span> effect
+takes the selected range(s) and resizes them about the centre of each
+range. <br>
+      </p>
+      <p>The effect <span style="font-style: italic;">value</span>
+controls the amount of <span style="font-style: italic;">resize</span>
+and whether to reverse in time and/or
+frequency. <br>
+      </p>
+      <p>&nbsp;</p>
+      <p align="center"><img style="width: 497px; height: 308px;"
+ alt="resize diagram" src="data/resize.png"> </p>
+      <p>Squeezing the spectrum (resizing less than 100%) results in a
+pitch shift towards the
+range centre and also slows down the sound in time. Expanding the
+spectrum (resizing greater than 100%) tends to make the block repeat.<br>
+      </p>
+      <p>For some
+fun try in combination with the masking effects.</p>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>Resample</i></strong></font></td>
+      <td>
+      <p>Resample&nbsp;is just the same as what resample normally does
+- it changes the pitch and speed together.</p>
+      <p align="center"><img src="data/resample.gif">&nbsp;</p>
+      <p>When used with long block sizes (&gt;300msec) you can hear the
+segment of sound being repeated. If you use it&nbsp;with medium sizes
+(say 50msec) it becomes more of a
+pitch shifting effect.<br>
+      </p>
+      <p>It is easy to get lots of clicking and popping with this
+effect - one way to remove is to set a threshold mask for less than 40%
+(say) followed by a 100% smear afterwards. Check the <span
+ style="font-style: italic;">resample</span> preset
+for this.<br>
+      </p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top">
+      <p><font color="#004080"><strong><i>Shift<br>
+      </i></strong></font><font color="#004080"><strong><i>ShiftConst<br>
+      </i></strong></font><font color="#004080"><strong><i><br>
+      </i></strong></font> </p>
+      </td>
+      <td>
+      <p>Modify the pitch of the&nbsp;selected spectrum<i></i>.<span
+ style="font-style: italic;"><br>
+      </span></p>
+      <p><span style="font-style: italic;"><br>
+      </span><i>Shift</i> changes the pitch by a constant number of <i>notes</i>
+while <i>ShiftConst</i>
+shifts by a fixed number of <i>Hertz</i> . </p>
+      <p>The constant&nbsp;shift&nbsp;mode may be similar to
+frequency modulating effects or listening to single-side-band CB
+radios. It tends to give&nbsp;a metallic quality as the sound loses its
+normal harmonic relationships. </p>
+      <p>Shift resolution is affected by the block length - longer
+lengths&nbsp;result in&nbsp;higher shifting resolution.</p>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top">
+      <p><font color="#004080"><strong><i>HarmShift<br>
+      </i></strong></font><font color="#004080"><strong><i>HarmRepitch</i></strong></font></p>
+      </td>
+      <td>
+      <p>Harmonic frequency shift by a&nbsp;constant number of notes (<i>HarmShift</i>)
+or to a particular note (<i>HarmRepitch</i>). The stereo version of <span
+ style="font-style: italic;">HarmRepitch</span> can also pitch match
+the left channel to the right channel -
+this is displayed as <span style="font-family: monospace;">right+</span><i
+ style="font-family: monospace;">notes</i> in the effect value.<br>
+      </p>
+      <p>These effects will only
+work correctly on single voice or&nbsp;single note sounds (i.e. a chord
+won't be properly pitch shifted). <span style="font-style: italic;">HarmShift</span>
+is similar in function to <span style="font-style: italic;">Shift</span>
+except it will generally do a better job for a single voice sound.<br>
+      </p>
+      <center><img src="data/harmshift.gif"></center>
+      <p align="left"><i>DtBlkFx</i>&nbsp;shifts the frequency
+spectrum in&nbsp;blocks that are aligned to harmonics of the sound
+(shown&nbsp;in alternating pink &amp; blue). The fundamental frequency
+(centre of the first block) is automatically&nbsp;set&nbsp;to&nbsp;the
+loudest tone below 1/8th of the sample rate (i.e. 5.5Khz/F-8 at 44.1Khz
+sampling).&nbsp; </p>
+      <p align="left">Use the <i>AutoHarmMask</i> effect (described
+later) in the effect position immediately previous to control harmonic <i>width</i>
+and <i>all/even/odd/between</i> setting (refer oto the <i>HarmFilt</i>
+diagram) . In this case the&nbsp;fundamental is found&nbsp;from
+the loudest peak within the <i>AutoHarmMask</i> <i>FreqA/B</i>
+&nbsp;range (instead of below 1/8th of the sample rate).</p>
+      <p align="left">Note that the <i>DtBlkFx's</i> spectrogram
+display will not show the harmonic ranges as equally spaced as shown
+above because of the way it spaces the frequencies (logarithmic).</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i><font
+ color="#004080"><strong><i>HarmFilt</i></strong></font></i></strong></font></td>
+      <td>
+      <p><i>HarmFilt</i> (Harmonic Filter)&nbsp;is a&nbsp;comb
+filter&nbsp;that allows you to modify amplitude at regular intervals or
+      <i>harmonics</i> but leave the gaps between unchanged. You
+can&nbsp;use this to&nbsp;control the amplitude of a particular
+note&nbsp;or to produce interesting sweeping effects (similar to
+"phasing").&nbsp;Be sure to set the effect <i>Amp</i> to be non-0 dB
+(e.g. try -inf or +40 dB) to make the effect do something.</p>
+      <center><img src="data/harmfilt.gif"></center>
+      <p>The above diagram shows the&nbsp;possible frequency
+ranges&nbsp;selected by the effect&nbsp;(semi-transparent red squares).
+The <i>fundamental</i> frequency&nbsp;corresponds to&nbsp;which
+ever&nbsp;<i>FreqA/FreqB</i> control&nbsp;has a lower frequency while
+the other controls the maximum frequency limit.&nbsp; The effect <i>value</i>&nbsp;sets
+the width around each harmonic and which harmonics you want to modify -
+all, dd, even or between. </p>
+      <p>Note that the <i>DtBlkFx's</i> spectrogram display will not
+show the harmonic ranges as equally spaced as shown above because of
+the way it spaces the frequencies (logarithmic).</p>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i><font
+ color="#004080"><strong><i>AutoHarm</i></strong></font></i></strong></font></td>
+      <td>
+      <p><i>AutoHarm</i> is similar to <i>HarmFilt</i>
+except&nbsp;that the&nbsp;fundamental frequency is automatically
+determined as the loudest tone below 1/8th of the sample rate (i.e.
+5.5Khz/F-8 at 44.1Khz sampling).&nbsp;Use this to automatically
+track&nbsp;a&nbsp;pitched
+sound&nbsp;and change its amplitude.</p>
+      <center><img src="data/autoharm.gif"></center>
+      <p>The harmonic <i>width</i> and <i>all/odd/even/between</i>
+setting is controlled by the effect value (see <i>HarmFilt</i>).</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><strong><i>
+      <p><font color="#004080"><strong><i>Triangles<br>
+Squares<br>
+Saws<br>
+Pointy<br>
+Sweep</i></strong></font></p>
+      </i></strong></font> </td>
+      <td>
+      <p>These effects&nbsp;change the&nbsp;timbre&nbsp;of a pitched
+input sound&nbsp;by power matching harmonics to&nbsp;various built-in
+envelopes.&nbsp;Like <i>AutoHarm, HarmShift &amp; HarmRepitch </i>these
+effects only work as&nbsp;described on a single voice or note and the
+fundamental is automatically determined from the loudest tone below
+1/8th of the sample rate (i.e. 5.5Khz/F-8 for 44.1Khz sampling)<br>
+      </p>
+      <center><img src="data/harmmatch.gif"></center>
+      <p>The effect <i>value</i>&nbsp;varies the harmonic envelope
+according to&nbsp;a built-in sequence of envelopes.&nbsp;</p>
+      <p>Use the <i>AutoHarmMask</i> effect (described later) in the
+effect position immediately above to control harmonic <i>width</i>
+and <i>all/even/odd/between</i> setting (refer oto the <i>HarmFilt</i>
+diagram) . In this case the&nbsp;fundamental is found&nbsp;from
+the&nbsp;<i>AutoHarmMask</i> <i>FreqA/B</i> &nbsp;range while the <i>HarmShift/HarmRepitch
+FreqA/B</i> range&nbsp;specifies the inclusion or exclusion range.</p>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td style="vertical-align: top;"><span style="font-style: italic;">DoNotUse</span><br>
+      </td>
+      <td style="vertical-align: top;">Effects marked <span
+ style="font-style: italic;">DoNotUse</span> don't
+do anything - they are called this because I may put an effect there in
+future.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</center>
+<p align="left"><i><strong>Mask Effects</strong></i></p>
+<p align="left"><i>Mask</i>&nbsp;effects don't change the sound in
+anyway by themselves but affect&nbsp;which frequencies a&nbsp;<i>normal</i>&nbsp;effect
+immediately following will be applied.&nbsp; For example if you set the
+first effect as <i>ThreshMask</i> and the second effect as <i>Contrast
+</i>you can&nbsp;now choose to apply&nbsp;<i>Contrast</i> only to
+frequency components above or below the threshold.<br>
+</p>
+<p align="left">Masks will operate with any other non-mask effect
+unless specifically noted.<br>
+</p>
+<p align="left">Note:&nbsp;A normal effect can only have one mask (i.e.
+if you set 2 masks in a row then the first mask will be ignored).</p>
+<h2 align="left">
+<center>
+<table id="Table3" bgcolor="#aaaaaa" border="0" cellpadding="6"
+ cellspacing="1" width="90%">
+  <tbody>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><i><strong>HarmMask</strong></i></font></td>
+      <td>
+      <p><i>HarmMask</i> is the masking version of <i>HarmFilt</i>
+and allows you to apply any normal effect to the harmonics of a
+particular note.</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><i><strong>AutoHarmMask</strong></i></font></td>
+      <td><i>AutoHarmMask</i> is the masking version of <i>AutoHarm</i>
+and has the same effect <i>value</i> meaning.</td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><i><strong>ASubH1Mask<br>
+      </strong></i><font color="#004080"><i><strong>ASubH2Mask<br>
+      <font color="#004080">ASubH3Mask</font></strong></i></font></font></td>
+      <td>These effects are all variants of <i>AutoHarmMask</i>
+differing in that the fundamental frequency is taken as 1/2 (<i>ASubH1Mask</i>),
+1/3 (<i>ASubH2Mask</i>) or 1/4 (<i>ASubH3Mask</i>) of the loudest
+frequency component within the selected range.</td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><i><strong>ThreshMask</strong></i></font></td>
+      <td>Thresh mask is the masking version of <i>Thresh</i> and
+lets you apply the following&nbsp;"normal" effect to only frequencies
+above or below a particular threshold.</td>
+    </tr>
+  </tbody>
+</table>
+</center>
+</h2>
+<p align="left"><strong><i>Stereo Only Effects</i></strong></p>
+<p align="left">These effects are only available in the stereo version
+of DtBlkFx because they require 2 channels to operate</p>
+<strong><i>
+<h2 align="left">
+<center>
+<table id="Table4" bgcolor="#aaaaaa" border="0" cellpadding="6"
+ cellspacing="1" width="90%">
+  <tbody>
+    <tr bgcolor="#eeeeff">
+      <td nowrap="nowrap" valign="top"><font color="#004080"><i><strong>Vocode</strong></i></font></td>
+      <td>
+      <p align="left"><i>Vocode</i>&nbsp;mixes the&nbsp;two channels
+by taking&nbsp;the&nbsp;frequency&nbsp;envelope&nbsp;of the&nbsp;left
+channel and applying it to the&nbsp;right channel (with the result in
+both the left and right).</p>
+      <p align="left">Example: feed voice into the left channel (red
+spectrum)&nbsp;and some strings into the right (blue spectrum). <i>DtBlkFx</i>
+will mix the voice and the strings to produce talking strings (which is
+just just what we need).</p>
+      <p align="center"><img src="data/vocode.jpg"> </p>
+      <p align="left"><i>Vocode</i> takes the frequency envelope of
+the&nbsp;left channel&nbsp;and applies it&nbsp;to the right channel. It
+operates by dividing the spectrum into a number of blocks (controlled
+by effect <i>value</i>) and&nbsp;adjusting the amplitude of each
+block from the right channel&nbsp;so as to power-match with the
+corresponding block in the left channel.</p>
+      <p align="left">When <i>FreqA</i>&nbsp;&lt; <i>FreqB</i>
+then processing on the right channel is limited to that range while the
+entire spectrum is used from the left channel. If <i>FreqB</i>&nbsp;&lt;
+      <i>FreqA</i> then the entire spectrum of the right channel is
+processed while the envelope from the left channel is limited to the <i>FreqB-FreqA</i>
+range.</p>
+      <p align="left">Mask effects are not supported and will do
+nothing.</p>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td nowrap="nowrap" valign="top">
+      <p><font color="#004080"><i><strong>HarmMatchLR<br>
+      </strong></i></font><strong><i><font color="#004080">HarmMatchRL</font></i></strong></p>
+      </td>
+      <td>
+      <p><i>HarmMatchLR &amp; HarmMatchRL</i> match the power from
+each harmonic&nbsp;in one channel&nbsp;to the corresponding
+harmonic&nbsp;in the other resulting in a different type of vocoding.</p>
+      <p><i>HarmMatchLR</i>&nbsp;uses&nbsp;the&nbsp;left channel as a
+reference and adjusts&nbsp;the right channel to match while&nbsp;<i>HarmMatchRL</i>
+goes the other way (right is reference, left is adjusted). Both
+versions of the effect&nbsp;output the adjusted channel on both left
+&amp; right channels (i.e. reference is not output) and always set
+the&nbsp;overall output power to match the left channel.</p>
+      <center><img src="data/harmmatch2.gif"></center>
+      <center>
+      <p align="left">The fundamental frequency (centre of the first
+block) for each channel is automatically&nbsp;set by&nbsp;the loudest
+peak&nbsp;within the <i>FreqA/FreqB</i> range. The effect <i>value</i>
+controls the harmonic <i>width</i> and <i>all/odd/even/between</i>
+setting. Refer to&nbsp;<i>AutoHarm</i> for more information -
+as&nbsp;with all other harmonic effects these only work as described
+for single voice sounds (although it will do interesting things
+on chords).</p>
+      <p align="left">Use <i>AutoHarmMask</i> in the effect position
+immediately above to allow individual control over channel 1 &amp;
+channel 2. The <i>AutoHarmMask</i>&nbsp;settings (<i>FreqA/FreqB</i>
+&amp; <i>value</i>)&nbsp;refer to&nbsp;channel 1 while the <i>HarmMatch</i>
+settings&nbsp;refer to&nbsp;channel 2 - this means you can set
+different fundamental search ranges and harmonic settings for each
+channel.</p>
+      <p align="left"><i>ThreshMask</i> and <i>HarmMask</i> are
+not supported and will do nothing.</p>
+      <p align="left">The above diagram differs from what you will see
+in the spectrogram because of a different frequency scale (logarithmic).</p>
+      </center>
+      </td>
+    </tr>
+    <tr bgcolor="#eeeeff">
+      <td style="vertical-align: top;"><span
+ style="font-style: italic; font-weight: bold;" color="#004080">CrossMix</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-style: italic;">CrossMix</span>
+combines the left &amp; right channels by multiplying the frequency
+components (time-convolution) of the selected range(s).<br>
+      <br>
+The <span style="font-style: italic;">value</span> controls the ratio
+of left to
+right mix and which channel will be output for all other frequencies.<br>
+      <br>
+      <div style="text-align: center;"><img
+ style="width: 602px; height: 420px;" alt="crossmix"
+ src="data/crossmix.png"><br>
+      </div>
+      </td>
+    </tr>
+    <tr bgcolor="#ffeeff">
+      <td style="vertical-align: top;"><span
+ style="font-weight: bold; font-style: italic;" color="#004080">WarpMix</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-style: italic;">WarpMix</span>
+produces an output by warping and combining the frequency spectrum of
+the left and right channels as follows:<br>
+      <br>
+1. Divide the spectrum of each channel into segments of equal power
+(the number of segments is determined by the <span
+ style="font-style: italic;">Amp</span> percentage in for <span
+ style="font-style: italic;">mode-1 WarpMix</span>)<br>
+2. Resize each segment to a frequency and width intermediate to both
+channels (determined
+by the effect <span style="font-style: italic;">value</span>)<br>
+3. Add the resized segments together using a ratio determined by the
+effect <span style="font-style: italic;">value</span><br>
+      <br>
+      <div style="text-align: center;"><img
+ style="width: 600px; height: 450px;" alt="weirdmix"
+ src="data/weirdmix.png"><br>
+      </div>
+      <br>
+      <br>
+The effect <span style="font-style: italic;">value</span> also
+controls what mode <span style="font-style: italic;">WarpMix</span>
+should operate in. <span style="font-style: italic;">Mode-1</span>
+proceeds as shown above while <span style="font-style: italic;">Mode-0</span>
+divides the spectrum into as many segments as there are frequency bins.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</center>
+</h2>
+</i></strong>
+<h2 align="left">Reducing CPU usage</h2>
+<p align="left">DtBlkFx can be quite hard on your CPU! How can you
+reduce it?? Try these...</p>
+<ul dir="ltr" style="margin-right: 0px;">
+  <li>
+    <div align="left">Reduce the <i>overlap</i> as much as possible
+- for example 85% overlap uses&nbsp;quadruple the CPU as 40% overlap!</div>
+  </li>
+  <li>
+    <div align="left">Use the mono version of <i>DtBlkFx</i>&nbsp;where
+ever possible - it will use around 1/2 of the CPU</div>
+  </li>
+  <li>
+    <div align="left">Set the <i>MixBack</i> to 100% if you don't
+want any effect to be run (but keep the delay) instead of tweaking
+effects to do nothing</div>
+  </li>
+  <li>
+    <div align="left">Turn off&nbsp;"inactive" effects by setting both
+frequencies to the same (for example, 0 Hz)</div>
+  </li>
+  <li>
+    <div align="left">Set the smallest frequency range possible for
+each effect, particularly at the top end (the very top octave
+corresponds to 1/2 of the total processing for an individual effect)</div>
+  </li>
+  <li>
+    <div align="left">Try to use block sizes&nbsp;between
+512&nbsp;and&nbsp;16384 samples</div>
+  </li>
+  <li>
+    <div align="left">Turn off <i>Sync</i> if you don't need it,
+particularly on larger blk sizes&nbsp;- extra&nbsp;blocks may be
+processed on each beat if it is turned on</div>
+  </li>
+  <li>
+    <div align="left">Increase the delay so that full blocks can be
+processed - forcing <i> DtBlkFx</i> to process partial blocks will
+use more CPU (<i>BlkSize</i>&nbsp;is marked&nbsp;with an asterisk
+on&nbsp;the user interface&nbsp;)</div>
+  </li>
+  <li>
+    <div align="left">Close the user interface if you don't need it or at least
+pause the spectrograms -&nbsp;generating &amp; scrolling
+the&nbsp;graphics eats CPU<br>
+    </div>
+  </li>
+</ul>
+<h2 align="left">Tutorials</h2>
+<p align="left">I agree this would be good... If anyone wants to write
+some, please do!<br>
+</p>
+<p align="left">Have a look through the presets for some hints.<br>
+</p>
+<h2 align="left">Other stuff</h2>
+All of the graphics components (<span style="font-style: italic;">32
+bit portable network graphics</span> format) for the user interface and the
+presets <span style="font-style: italic;"></span>are stored in the <span
+ style="font-style: italic;">dtblkfx</span> directory. Feel free to
+customize!<br>
+<br>
+<div align="left"><i>DtBlkFx</i>&nbsp;is freely distributable and is
+covered&nbsp;by the&nbsp;same terms as the GNU licensing agreement.
+This is an interim
+version and the source isn't quite fit for consumption but if you
+really really want it I will make it available. The Mac version was
+made with X-code &amp; the Windows version with Microsoft
+Visual&nbsp;C++ Studio 2008 express edition.</div>
+<div align="left">&nbsp;</div>
+<div align="left">The <i>Fastest-Fourier-Transform-in-the-West</i>
+  (version 3.1.2) is used to perform frequency transforms. Many thanks to
+  everyone that made FFTW (please see <A HREF="http://www.fftw.org/fftw3_doc/Acknowledgments.html">http://www.fftw.org/fftw3_doc/Acknowledgments.html</A>)
+  <i>libpng/zlib</i> (please see <A HREF=" http://www.zlib.net/">www.zlib.net</A> and <A HREF="http://www.libpng.org/pub/png/libpng.html">www.libpng.org/pub/png/libpng.html</A>)
+  and VSTSDK/VSTGUI (please see <A href="http://ygrabit.steinberg.de/~ygrabit/public_html/index.html">ygrabit.steinberg.de/~ygrabit/public_html/index.html</A>).
+</div>
+<div align="left">&nbsp;</div>
+<div align="left">I plan on implementing the following stuff in a
+future version of <i> DtBlkFx</i></div>
+<ul>
+  <li> setInitialDelay() </li>
+  <li>Param Morphing (actually largely implemented but needs more stuff in the GUI)<br>
+  </li>
+  <li>More spectrogram controls</li>
+  <li>
+    <div align="left">Maybe a rewrite for a "modular-synth" style
+architecture<br>
+    </div>
+  </li>
+</ul>
+<h2 align="left">Contact</h2>
+<center>
+<p align="left">Please send me work featuring <span
+ style="font-style: italic;">BlkFx</span>, customized user interface graphics, bug
+reports, comments and suggestions.<br>
+</p>
+<table border="0" cellpadding="6" cellspacing="0">
+  <tbody>
+    <tr>
+      <td>Author</td>
+      <td>Darrell Tam</td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td><a href="mailto:darrell.barrell@gmail.com">darrell.barrell@gmail.com</a></td>
+    </tr>
+  </tbody>
+</table>
+</center>
+<br>
+<br>
+</body>
+</html>
