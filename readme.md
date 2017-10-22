@@ -2,6 +2,10 @@
 
 DtBlkFx is a Fast-Fourier-Transform (FFT) based VST plug-in.
 
+[![Download Latest](https://img.shields.io/badge/download-latest-green.svg)](https://github.com/dozius/dtblkfx/releases/latest)
+[![Github All Releases](https://img.shields.io/github/downloads/dozius/dtblkfx/total.svg)](https://github.com/dozius/dtblkfx/releases/latest)
+[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/cisc)
+
 ## Usage examples
 
 * Precision parametric equalizing with sharp-roll off
@@ -43,7 +47,7 @@ effects in this way allows you to make completely new and surprising sounds.
 If you would like to show your appreciation you can send donations through
 paypal.
 
-[![paypal me](https://img.shields.io/badge/paypal-me-blue.svg)](https://www.paypal.me/cisc)
+[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/cisc)
 
 # License
 DtBlkFx is freely distributable and is covered by the terms of the GNU licensing
