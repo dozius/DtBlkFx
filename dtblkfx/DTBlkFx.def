@@ -1,0 +1,4 @@
+LIBRARY			DtBlkFx
+EXPORTS
+	VSTPluginMain
+	main=VSTPluginMain
