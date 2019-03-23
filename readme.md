@@ -2,6 +2,25 @@
 
 DtBlkFx is a Fast-Fourier-Transform (FFT) based VST plug-in.
 
+This is a fork of the original DtBlkFx by Darrell Tam. The original source was
+not ready for public consumption. I have spent a considerable amount of time
+getting this ready for a Github release.
+
+Despite a major overhaul of the project structure, I have only made very small
+changes to the source itself to enable x64 builds on windows. There is still a
+long way to go to making it clean and easy to hack on.
+
+That being said, anyone with a reasonable amount C++ experience shouldn't find
+it too difficult to get started. I am glad to accept pull requests and any other
+help I can get.
+
+## Donations
+
+If you would like to show your appreciation you can send donations through
+paypal.
+
+[![paypal me](https://img.shields.io/badge/paypal-me-blue.svg)](https://www.paypal.me/cisc)
+
 ## Usage examples
 
 * Precision parametric equalizing with sharp-roll off
@@ -37,20 +56,3 @@ DtBlkFx is a Fast-Fourier-Transform (FFT) based VST plug-in.
 
 You can select up to 8 of the above effects to be run in series! Combining the
 effects in this way allows you to make completely new and surprising sounds.
-
-## Donations
-
-If you would like to show your appreciation you can send donations through
-paypal.
-
-[![paypal me](https://img.shields.io/badge/paypal-me-blue.svg)](https://www.paypal.me/cisc)
-
-# License
-DtBlkFx is freely distributable and is covered by the terms of the GNU licensing
-agreement.
-
-This is a fork of the original source by Darrell Tam. As with the original, this
-fork is also not ready for wide public consumption. I have only made very small
-changes thus far to enable x64 builds on windows. If you desire to have a copy
-of the modified source you can contact me here on GitHub or via
-[email](mailto:dozius@gmail.com).
