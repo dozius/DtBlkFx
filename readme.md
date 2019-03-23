@@ -2,6 +2,10 @@
 
 DtBlkFx is a Fast-Fourier-Transform (FFT) based VST plug-in.
 
+[![Download Latest](https://img.shields.io/badge/download-latest-green.svg)](https://github.com/dozius/dtblkfx/releases/latest)
+[![Github All Releases](https://img.shields.io/github/downloads/dozius/dtblkfx/total.svg)](https://github.com/dozius/dtblkfx/releases/latest)
+[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/cisc)
+
 This is a fork of the original DtBlkFx by Darrell Tam. The original source was
 not ready for public consumption. I have spent a considerable amount of time
 getting this ready for a Github release.
@@ -13,13 +17,6 @@ long way to go to making it clean and easy to hack on.
 That being said, anyone with a reasonable amount C++ experience shouldn't find
 it too difficult to get started. I am glad to accept pull requests and any other
 help I can get.
-
-## Donations
-
-If you would like to show your appreciation you can send donations through
-paypal.
-
-[![paypal me](https://img.shields.io/badge/paypal-me-blue.svg)](https://www.paypal.me/cisc)
 
 ## Usage examples
 
