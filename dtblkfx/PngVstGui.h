@@ -5,6 +5,6 @@
 #include <ostream>
 
 // load a PNG file into a CContextRGBA, error & warning messages are written to "err"
-bool/*success*/ReadPng(CContextRGBA* dst, string file_name, ostream* err_str);
+bool /*success*/ ReadPng(CContextRGBA* dst, string file_name, ostream* err_str);
 
 #endif

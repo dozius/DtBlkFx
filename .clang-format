@@ -1,0 +1,14 @@
+---
+# clang-format 7.0.0
+Language: Cpp
+BasedOnStyle: LLVM
+AllowShortFunctionsOnASingleLine: Inline
+BinPackArguments: false
+BreakBeforeBraces: Stroustrup
+BreakInheritanceList: BeforeComma
+BreakConstructorInitializers: BeforeComma
+ColumnLimit: 100
+IndentCaseLabels: true
+IndentPPDirectives: AfterHash
+PointerAlignment: Left
+...

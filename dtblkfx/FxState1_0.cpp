@@ -3,25 +3,27 @@ Copyright (c) 2005-2006 Darrell Tam
 email: darrell.barrell@gmail.com
 
 History
-	Date       Version    Programmer         Comments
-	16/2/03    1.0        Darrell Tam		Created
+        Date       Version    Programmer         Comments
+        16/2/03    1.0        Darrell Tam		Created
 
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation; either version 2 of the
+License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
 TODO:
   this is getting big and fat
 ***************************************************************************************************/
 
 #include <StdAfx.h>
 #if 0
-#include <wx/listctrl.h>
-#include <wx/display.h>
-#include <wx/popupwin.h>
-#include "wx/spinctrl.h"
-#include "MainGuiPanel.h"
+#  include "MainGuiPanel.h"
+#  include "wx/spinctrl.h"
+#  include <wx/display.h>
+#  include <wx/listctrl.h>
+#  include <wx/popupwin.h>
 //#include "MorphParamEdit.h"
 #endif
 
@@ -31,146 +33,145 @@ TODO:
 #include "Debug.h"
 
 #ifdef _DEBUG
-	long g_dbg_inst = 0;
-	#ifdef _WIN32
-		#define LOG_FILE_PATH "c:\\"
-	#else
-		#define LOG_FILE_PATH "~/"
-	#endif
+long g_dbg_inst = 0;
+#  ifdef _WIN32
+#    define LOG_FILE_PATH "c:\\"
+#  else
+#    define LOG_FILE_PATH "~/"
+#  endif
 #endif
-
 
 //-------------------------------------------------------------------------------------------------
 FxRun1_0* FxState1_0::getFxRun(bool for_display)
 {
-	// don't interpolate effect type when for_display===false
-	//
-	float fx_type_param = _b->get(for_display ? &GetInput : &GetPrev, _param[BlkFxParam::FX_TYPE]);
+  // don't interpolate effect type when for_display===false
+  //
+  float fx_type_param = _b->get(for_display ? &GetInput : &GetPrev, _param[BlkFxParam::FX_TYPE]);
 
-	//
-	int fx_type = BlkFxParam::getEffectType(fx_type_param);
+  //
+  int fx_type = BlkFxParam::getEffectType(fx_type_param);
 
-	//
-	return GetFxRun1_0(fx_type);
+  //
+  return GetFxRun1_0(fx_type);
 }
 
 //-------------------------------------------------------------------------------------------------
 void FxState1_0::init(DtBlkFx* b, int fx_set)
 {
-	//_disp_freq_mode = DISP_FREQ_HZ;
+  //_disp_freq_mode = DISP_FREQ_HZ;
 
-	_fx_set = fx_set;
-	_b = b;
+  _fx_set = fx_set;
+  _b = b;
 
-	#ifdef _DEBUG
-		CharArray<64> name;
-		name << LOG_FILE_PATH "fxstate_" << InterlockedIncrement(&g_dbg_inst) << ".html"; 
-		_html_log.open(name);
-	#endif
-	
-	LOG(0x088000, "FxState1_0::init" << VAR(b) << VAR(fx_set));
+#ifdef _DEBUG
+  CharArray<64> name;
+  name << LOG_FILE_PATH "fxstate_" << InterlockedIncrement(&g_dbg_inst) << ".html";
+  _html_log.open(name);
+#endif
 
-	// set all params to behave like 1.0 params
-	int param_offs = BlkFxParam::paramOffs(_fx_set);
-	for(int i = 0; i < BlkFxParam::NUM_FX_PARAMS; i++) {
-		_param[i].setModeLin(param_offs+i);
-		Array<float, 6> anchor_data = { 0, .2f, .4f, .6f, .8f, 1 };
-		_param[i].setAll(anchor_data);
-	}
+  LOG(0x088000, "FxState1_0::init" << VAR(b) << VAR(fx_set));
+
+  // set all params to behave like 1.0 params
+  int param_offs = BlkFxParam::paramOffs(_fx_set);
+  for (int i = 0; i < BlkFxParam::NUM_FX_PARAMS; i++) {
+    _param[i].setModeLin(param_offs + i);
+    Array<float, 6> anchor_data = {0, .2f, .4f, .6f, .8f, 1};
+    _param[i].setAll(anchor_data);
+  }
 }
 
 //-------------------------------------------------------------------------------------------------
 FxState1_0* FxState1_0::prevFxState()
 // find the previous fx state based on our fx set number
 {
-	// no previous?
-	if(_fx_set <= 0) return NULL;
+  // no previous?
+  if (_fx_set <= 0)
+    return NULL;
 
-	// get the prev fx state from blkfx
-	return _b->_fx1_0 + _fx_set - 1;
+  // get the prev fx state from blkfx
+  return _b->_fx1_0 + _fx_set - 1;
 }
-
 
 //-------------------------------------------------------------------------------------------------
 void FxState1_0::prepare()
 // prepare to process
 // fill temp variables according to params from "b"
 {
-	using namespace BlkFxParam;
+  using namespace BlkFxParam;
 
-	temp.fft_fx = getFxRun(false);
+  temp.fft_fx = getFxRun(false);
 
-	// copy param values to temporaries
-	//
-	temp.amp_param = _b->get(&GetInterp, _param[FX_AMP]);
-	temp.val = _b->get(&GetInterp, _param[FX_VAL]);
+  // copy param values to temporaries
+  //
+  temp.amp_param = _b->get(&GetInterp, _param[FX_AMP]);
+  temp.val = _b->get(&GetInterp, _param[FX_VAL]);
 
-	temp.amp = BlkFxParam::getEffectAmpMult(temp.amp_param, temp.fft_fx->ampMixMode());
+  temp.amp = BlkFxParam::getEffectAmpMult(temp.amp_param, temp.fft_fx->ampMixMode());
 
-	// freq stuff
-	for(int i = 0; i < 2; i++) {
-		temp.freq_param[i] = _b->get(&GetInterp, _param[i]);
-		temp.fbin[i] = _b->getFFTBin(temp.freq_param[i]);
-		temp.bin[i] = RndToInt(temp.fbin[i]);
-	}
+  // freq stuff
+  for (int i = 0; i < 2; i++) {
+    temp.freq_param[i] = _b->get(&GetInterp, _param[i]);
+    temp.fbin[i] = _b->getFFTBin(temp.freq_param[i]);
+    temp.bin[i] = RndToInt(temp.fbin[i]);
+  }
 }
 
 //-------------------------------------------------------------------------------------------------
-bool/*true=printed*/FxState1_0::getParamDisplay(BlkFxParam::SplitParamNum& p, float v, Rng<char> str)
+bool /*true=printed*/ FxState1_0::getParamDisplay(BlkFxParam::SplitParamNum& p, float v,
+                                                  Rng<char> str)
 {
-	using namespace BlkFxParam;
+  using namespace BlkFxParam;
 
-	// check whether our param is attached to the vst param
-	if(_param[p.fx_param].vstParamIdx() != p.param) return false;
+  // check whether our param is attached to the vst param
+  if (_param[p.fx_param].vstParamIdx() != p.param)
+    return false;
 
-	// get value after morph
-	v = _param[p.fx_param](v);
+  // get value after morph
+  v = _param[p.fx_param](v);
 
-	// get the effect runtime interface
-	FxRun1_0* fx_run = getFxRun();
+  // get the effect runtime interface
+  FxRun1_0* fx_run = getFxRun();
 
-	// is the param used?
-	if(!fx_run->paramUsed(p.fx_param)) {
-		str << "-";
-		return true;
-	}
+  // is the param used?
+  if (!fx_run->paramUsed(p.fx_param)) {
+    str << "-";
+    return true;
+  }
 
-	switch(p.fx_param) {
-		case FX_FREQ_A:
-		case FX_FREQ_B: {
-			// put in note & freq
-			float freq_hz = _b->guessRoundHz(BlkFxParam::getHz(v));
-			str << sprnum(freq_hz, /*min unit*/1.0f) << "Hz";
-			return true;
-		}
+  switch (p.fx_param) {
+    case FX_FREQ_A:
+    case FX_FREQ_B: {
+      // put in note & freq
+      float freq_hz = _b->guessRoundHz(BlkFxParam::getHz(v));
+      str << sprnum(freq_hz, /*min unit*/ 1.0f) << "Hz";
+      return true;
+    }
 
-		case FX_AMP: {
-			bool mix_mode = fx_run->ampMixMode();
-			float amp_mult = getEffectAmpMult(v, mix_mode);
-			if(mix_mode && amp_mult <= 1.0f)
-				str << RndToInt(amp_mult*100.0f) << "%";
-			else if(amp_mult > 0)
-				str << sprf("%.1f dB", getEffectAmp(v));
-			else
-				str << "-inf dB";
-			return true;
-		}
+    case FX_AMP: {
+      bool mix_mode = fx_run->ampMixMode();
+      float amp_mult = getEffectAmpMult(v, mix_mode);
+      if (mix_mode && amp_mult <= 1.0f)
+        str << RndToInt(amp_mult * 100.0f) << "%";
+      else if (amp_mult > 0)
+        str << sprf("%.1f dB", getEffectAmp(v));
+      else
+        str << "-inf dB";
+      return true;
+    }
 
-		case FX_TYPE: {
-			str << fx_run->name();
-			return true;
-		}
+    case FX_TYPE: {
+      str << fx_run->name();
+      return true;
+    }
 
-		case FX_VAL: {
-			fx_run->dispVal(this, /*out*/str, v);
-			return true;
-		}
-	}
-	// text not printed
-	return false;
+    case FX_VAL: {
+      fx_run->dispVal(this, /*out*/ str, v);
+      return true;
+    }
+  }
+  // text not printed
+  return false;
 }
-
-
 
 #if 0
 //*************************************************************************************************
@@ -571,7 +572,7 @@ void FxState1_0::onPaintFxValEdit(wxPaintEvent& ev)
 	OutlineDrawText(dc, wdw->GetSize(), str);
 }
 
-#if 0
+#  if 0
 //-------------------------------------------------------------------------------------------------
 void FxState1_0::onPaintTopPanel(wxPaintEvent&)
 {
@@ -681,7 +682,6 @@ void FxState1_0::onPaintTopPanel(wxPaintEvent&)
 	s += fft_fx->dispVal(this, s, getParamInput(FX_VAL));
 	OutlineDrawText(dc, _ctrl[FX_VAL], str);
 }
-#endif
-
+#  endif
 
 #endif

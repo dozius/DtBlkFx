@@ -11,33 +11,33 @@ FxState1_0 : state associated with each effect position in a blkfx instance
 
 
 History
-	Date       Version    Programmer         Comments
-	16/2/03    1.0        Darrell Tam		Created
+        Date       Version    Programmer         Comments
+        16/2/03    1.0        Darrell Tam		Created
 
 
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation; either version 2 of the
+License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
 
 ***************************************************************************************************/
 
-#include <vector>
 #include <string.h>
+#include <vector>
 //#include "wxWidgetsExtras.h"
 
 #include "MorphParam.h"
 
 #ifdef _DEBUG
-	#include "HtmlLog.h"
+#  include "HtmlLog.h"
 #endif
-
 
 #include "BlkFxParam.h"
 #include "FxRun1_0.h"
 //#include "gui_stuff.h"
-
 
 class MainGuiPanel;
 class DtBlkFx;
@@ -53,62 +53,60 @@ class FxState1_0 //: public wxEvtHandler
 //
 {
 public:
-	// call init before use
-	void init(DtBlkFx* b, int fx_set);
+  // call init before use
+  void init(DtBlkFx* b, int fx_set);
 
-	bool/*true=printed*/getParamDisplay(BlkFxParam::SplitParamNum& p, float v, Rng<char> str);
+  bool /*true=printed*/ getParamDisplay(BlkFxParam::SplitParamNum& p, float v, Rng<char> str);
 
-	// called prior to process
-	void prepare();
+  // called prior to process
+  void prepare();
 
-	// perform the effect
-	void process() { temp.fft_fx->process(this); }
+  // perform the effect
+  void process() { temp.fft_fx->process(this); }
 
-	// get previous fx state from blkfx (or NULL)
-	FxState1_0* prevFxState();
+  // get previous fx state from blkfx (or NULL)
+  FxState1_0* prevFxState();
 
-	// which fx set we are
-	int _fx_set;
+  // which fx set we are
+  int _fx_set;
 
-	// parent
-	_Ptr<DtBlkFx> _b;
+  // parent
+  _Ptr<DtBlkFx> _b;
 
-	DtBlkFx* blkfx() { return _b; }
+  DtBlkFx* blkfx() { return _b; }
 
-	operator DtBlkFx* () { return _b; }
+  operator DtBlkFx*() { return _b; }
 
-	FxRun1_0* getFxRun(bool for_display = true);
+  FxRun1_0* getFxRun(bool for_display = true);
 
 public: // parameters
-	MorphParam _param[BlkFxParam::NUM_FX_PARAMS];
+  MorphParam _param[BlkFxParam::NUM_FX_PARAMS];
 
-	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public: // temporary variables used during processing
-	struct {
-		// unprocessed freq param, 0..1
-		Array<float, 2> freq_param;
+  struct {
+    // unprocessed freq param, 0..1
+    Array<float, 2> freq_param;
 
-		// unprocessed amp param, 0..1
-		float amp_param;
+    // unprocessed amp param, 0..1
+    float amp_param;
 
-		// which effect we're currently running
-		FxRun1_0* fft_fx;
+    // which effect we're currently running
+    FxRun1_0* fft_fx;
 
-		Array<float, 2> fbin;	// floating point version of start & stop bins
-		float amp;				// current amplitude (converted to linear scaling)
-		float val;				// current effect value
+    Array<float, 2> fbin; // floating point version of start & stop bins
+    float amp;            // current amplitude (converted to linear scaling)
+    float val;            // current effect value
 
-		Array<long, 2> bin;		// start & stop bin for this effect
+    Array<long, 2> bin; // start & stop bin for this effect
 
-	} temp;
+  } temp;
 
-
-	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public: // GUI state stuff
-
-	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 public: // GUI stuff that is only valid when the GUI is open
-	#if 0
+#if 0
 
 		bool openGui(MainGuiPanel *parent, wxSize sz);
 		void closeGui();
@@ -145,12 +143,11 @@ public: // GUI stuff that is only valid when the GUI is open
 	//	bool _top_panel_need_redraw;
 
 		enum { DISP_FREQ_HZ, DISP_FREQ_NOTE } _disp_freq_mode;
-	#endif
+#endif
 
-	#ifdef _DEBUG
-	HtmlLog _html_log;
-	#endif
+#ifdef _DEBUG
+  HtmlLog _html_log;
+#endif
 };
-
 
 #endif
