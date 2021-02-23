@@ -1,10 +1,13 @@
 # DtBlkFx
 cmake_minimum_required(VERSION 3.19)
 
+#Set the Vcpkg package manager as toolchain.
+#The user is still able to set their own path or leave out vcpkg if desired.
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/modules/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg cmake toolchain file")
+
 # The top-level CMakeLists.txt file for a project must contain a literal, direct call to the
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
-
 project(DTBLKFX VERSION 2.0.0)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
@@ -15,6 +18,7 @@ project(DTBLKFX VERSION 2.0.0)
 # find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
 # or
 add_subdirectory(modules/juce)
+
 
 # Copy on build for development purposes
 # set_directory_properties(PROPERTIES
@@ -63,6 +67,8 @@ juce_add_plugin(DtBlkFx
 
 # juce_generate_juce_header(AudioPluginExample)
 
+find_package(FFTW3 CONFIG REQUIRED)
+
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources (PRIVATE is normally best practice,
 # although it doesn't really affect executable targets). Finally, we supply a list of source files
@@ -99,6 +105,8 @@ target_compile_definitions(DtBlkFx
 
 # juce_add_binary_data(AudioPluginData SOURCES ...)
 
+target_include_directories(DtBlkFx PRIVATE ${FFTW3_INCLUDE_DIRS})
+
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
 # dependencies are resolved automatically, so `juce_core`, `juce_events` and so on will also be
@@ -116,6 +124,8 @@ target_link_libraries(DtBlkFx PRIVATE
     juce::juce_recommended_warning_flags
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
+
+	PRIVATE ${FFTW3_LIBRARIES}
 )
 
 target_compile_features(DtBlkFx PRIVATE cxx_std_17)

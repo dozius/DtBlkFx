@@ -1,3 +1,6 @@
 [submodule "modules/juce"]
 	path = modules/juce
 	url = https://github.com/juce-framework/JUCE.git
+[submodule "modules/vcpkg"]
+	path = modules/vcpkg
+	url = https://github.com/microsoft/vcpkg.git
