@@ -1,10 +1,13 @@
 # DtBlkFx
 cmake_minimum_required(VERSION 3.19)
 
+#Set the Vcpkg package manager as toolchain.
+#The user is still able to set their own path or leave out vcpkg if desired.
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/modules/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg cmake toolchain file")
+
 # The top-level CMakeLists.txt file for a project must contain a literal, direct call to the
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
-
 project(DTBLKFX VERSION 2.0.0)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
@@ -15,6 +18,7 @@ project(DTBLKFX VERSION 2.0.0)
 # find_package(JUCE CONFIG REQUIRED)        # If you've installed JUCE to your system
 # or
 add_subdirectory(modules/juce)
+
 
 # Copy on build for development purposes
 # set_directory_properties(PROPERTIES
@@ -62,6 +66,8 @@ juce_add_plugin(DtBlkFx
 # probably don't need to call this.
 
 # juce_generate_juce_header(AudioPluginExample)
+
+find_package(FFTW3 CONFIG REQUIRED)
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources (PRIVATE is normally best practice,
@@ -116,6 +122,8 @@ target_link_libraries(DtBlkFx PRIVATE
     juce::juce_recommended_warning_flags
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
+
+    FFTW3::fftw3
 )
 
 target_compile_features(DtBlkFx PRIVATE cxx_std_17)
