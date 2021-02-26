@@ -105,8 +105,6 @@ target_compile_definitions(DtBlkFx
 
 # juce_add_binary_data(AudioPluginData SOURCES ...)
 
-target_include_directories(DtBlkFx PRIVATE ${FFTW3_INCLUDE_DIRS})
-
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
 # dependencies are resolved automatically, so `juce_core`, `juce_events` and so on will also be
@@ -125,7 +123,7 @@ target_link_libraries(DtBlkFx PRIVATE
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
 
-	PRIVATE ${FFTW3_LIBRARIES}
+    FFTW3::fftw3
 )
 
 target_compile_features(DtBlkFx PRIVATE cxx_std_17)
